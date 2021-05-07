@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Enable EPEL Repository on CentOS 7
+      yum:
+        name: epel-release
+        state: latest
+
+    - name: Install packages
+      yum:
+        name: ["vim", "net-tools", "httpd", "lsof"]
+        state: latest
+
+    - name: Creating index.html
+      shell: echo 'Hello from '$(hostname)'' > /var/www/html/index.html
+
+    - name: ensure httpd is running
+      service:
+        name: httpd
+        state: started
